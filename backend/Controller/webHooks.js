@@ -26,7 +26,7 @@ export const clerkWebhooks = async (req, res) => {
 
         //switch case for different events like add update delete
         switch (type) {
-            case 'user.created': {
+            case 'users.created': {
 
                 const userData = {
                     _id: data.id,
@@ -43,7 +43,7 @@ export const clerkWebhooks = async (req, res) => {
 
                 break;
             }
-            case 'user.updated': {
+            case 'users.updated': {
 
                 const userData = {
                     email: data.email_address[0].email_address,
@@ -59,7 +59,7 @@ export const clerkWebhooks = async (req, res) => {
 
                 break;
             }
-            case 'user.deleted': {
+            case 'users.deleted': {
                 await User.findByIdAndDelete(data._id);
 
                 res.json({})
