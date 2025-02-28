@@ -22,6 +22,7 @@ export const clerkWebhooks = async (req, res) => {
         //getting data from request body
 
         const { data, type } = req.body;
+        //console.log(data, type)
 
         //switch case for different events like add update delete
         switch (type) {
@@ -29,7 +30,7 @@ export const clerkWebhooks = async (req, res) => {
 
                 const userData = {
                     _id: data.id,
-                    email: data.email_address[0].email_address,
+                    email: data.email_addresses[0].email_address,
                     name: data.first_name + " " + data.last_name,
                     image: data.image_url,
                     resume: "",
