@@ -1,9 +1,13 @@
 
 import React, { useContext, useEffect, useState } from 'react'
-import { assets } from './../assets/assets';
 import AppContext from '../context/AppContext';
+import axios from 'axios';
+import { assets } from '../assets/assets';
+import { ToastContainer, toast } from 'react-toastify';
 
 function RecruitorLogin() {
+
+    const { setShowRecruiterLogin, navigate, backendUrl, setCompanyData, setCompanyToken } = useContext(AppContext)
 
     const [state, setState] = useState('login');
 
@@ -20,7 +24,54 @@ function RecruitorLogin() {
 
 
         if (state === 'Sign Up' && !isTextDataSUbmitted) {
-            setTextDataSubmitted(true)
+            return setTextDataSubmitted(true)
+
+        }
+        else {
+
+        }
+        try {
+            if (state === 'login') {
+               // console.log(state)
+                const { data } = await axios.post(`${backendUrl}/api/company/login`, {
+                    email, password
+                })
+                if (data.success) {
+                    setCompanyToken(data.token)
+                    setCompanyData(data.company);
+                    localStorage.setItem('companyToken', data.token);
+                    setShowRecruiterLogin(false);
+                    toast.success(data.message);
+                    navigate('/dashboard');
+
+                } else {
+                    toast.error(data.message);
+                }
+            } else {
+
+                const formData = new FormData();
+                formData.append('name', name)
+                formData.append('email', email)
+                formData.append('password', password)
+                formData.append('image', image)
+
+                const { data } = await axios.post(`${backendUrl}/api/company/register`,
+                    formData,
+                )
+                if (data.success) {
+                    setCompanyToken(data.token)
+                    setCompanyData(data.company);
+                    localStorage.setItem('companyToken', data.token);
+                    setShowRecruiterLogin(false);
+                    toast.success(data.message);
+                    navigate('/dashboard');
+                } else {
+                    toast.error(data.message);
+                }
+            }
+
+        } catch (err) {
+            toast.error(err.message);
         }
     }
 
@@ -31,11 +82,12 @@ function RecruitorLogin() {
         }
     }, [])
 
-    const { setShowRecruiterLogin } = useContext(AppContext)
 
-    return (
+
+    return (    
         <div className='top-0 left-0 right-0 absolute bottom-0  z-10  backdrop-blur-sm bg-black/30 flex  justify-center '>
             <form onSubmit={onSubmithandler} className='relative bg-white p-10 rounded-xl my-auto text-slate-500 h-fit'>
+
                 <h1 className='text-center text-2xl text-neutral-700 font-medium'>Recruiter {state} </h1>
                 <p className='text-sm'>Welcome back! Please sign in to continue</p>
                 {

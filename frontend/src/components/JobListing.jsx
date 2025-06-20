@@ -4,11 +4,12 @@ import React, { useContext, useEffect, useState } from 'react'
 import AppContext from '../context/AppContext'
 import { assets, JobCategories, JobLocations } from './../assets/assets';
 import JobCard from './JobCard';
+import axios from 'axios';
 
 function JobListing() {
 
-    const { jobs, searchFilter, setSearcgFilter, setIsSearch, isSearch } = useContext(AppContext)
-    
+    const { jobs, companyToken, backendUrl, searchFilter, setSearcgFilter, setIsSearch, isSearch } = useContext(AppContext)
+
     const [showFilter, setShowFilter] = useState(false);
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -33,7 +34,16 @@ function JobListing() {
         )
     }
 
+    //function to get all jobs
+
+
+    // useEffect(()=>{
+
+    // },[companyToken])
+
     useEffect(() => {
+        //setFilterJobs(jobs)
+
         const matchingCategory = job => selectCategories.length === 0 || selectCategories.includes(job.category)
 
         const matchesLocation = job => selectedLocation.length == 0 || selectedLocation.includes(job.location)
@@ -49,7 +59,7 @@ function JobListing() {
         setFilterJobs(newFilterJobs);
         setCurrentPage(1);
 
-    }, [jobs, selectCategories, selectedLocation, searchFilter])
+    }, [jobs, selectCategories, selectedLocation, companyToken, searchFilter])
 
     return (
         <div className='container 2xl:px-20 mx-auto  flex flex-col lg:flex-row max-lg:space-y-8 py-8'>

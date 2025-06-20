@@ -9,21 +9,25 @@ const Router = express.Router();
 
 //register a compay
 Router.route("/register")
-    .post( upload.single('image'), registerCompany)
+    .post( upload.single('image'), registerCompany)  //done
 
 
 //login
 
 Router.route("/login")
-    .post(loginCompany)
+    .post(loginCompany)  //done
+
+// //logout
+// Router.route("/log-out")
+//     .post(protectCompay, logout )
 
 //get company data
 Router.route("/company")
-    .get(protectCompay,getCompanyData)
+    .get(protectCompay,getCompanyData)  //done
 
 //post a job
 Router.route("/post-job")
-    .post( protectCompay, postJob);
+    .post( protectCompay, postJob);  //done
 
 //get applicants data 
 Router.route("/applicants")
@@ -31,8 +35,8 @@ Router.route("/applicants")
 
 
 // get company jobs list
-Router.route("/lsit-job")
-    .get(protectCompay,getCompanyPostedJobs)
+Router.route("/list-jobs")
+    .get(protectCompay,getCompanyPostedJobs)  //done
 
 
 //change application status
@@ -44,4 +48,4 @@ Router.route("/change-visibilty")
     .post(protectCompay,changeVisibility)
 
 
-export default Router;
+export default Router;  

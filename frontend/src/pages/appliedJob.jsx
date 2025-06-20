@@ -9,27 +9,39 @@ import kconvert from 'k-convert';
 import { as } from './../../node_modules/moment/src/lib/duration/as';
 import JobCard from '../components/JobCard';
 import Footer from './../components/Footer';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 
 function AppliedJob() {
     const { id } = useParams();
 
-    const { jobs } = useContext(AppContext);
-    // console.log(jobs)
+    const { jobs, backendUrl } = useContext(AppContext);
+    // console.log( "all jobs", jobs)
 
     const [jobDatas, setJobDatas] = useState(null)
 
+    //fetch job data from backend
+
+
+
     const findJobFunction = async () => {
-        const data = jobs.filter(job => job._id === id)
-        if (data.length !== 0) {
-            setJobDatas(data[0])
-            // console.log(data[0])
+        try {
+
+            const { data } = await axios.get(`${backendUrl}/api/jobs/${id}`)
+            console.log("job data",  data)
+            if (data.success) {
+                setJobDatas(data.job)
+            }
+
+        } catch (err) {
+            toast.error(err.message);
         }
     }
 
     useEffect(() => {
-        if (jobs.length > 0) {
-            findJobFunction()
-        }
+
+        findJobFunction()
+
 
     }, [id, jobs])
 
@@ -90,9 +102,9 @@ function AppliedJob() {
                         {/* right section like more jobs */}
                         <div className='w-full lg:w-1/3 mt-8 lg:mt-0  space-y-5'>
                             <h2 className='text-xl font-medium'>More Jobs from {jobDatas.companyId.name}</h2>
-                            {jobs.filter(job=> job._id!== jobDatas._id  && job.companyId._id=== jobDatas.companyId._id)
-                            .filter(job=> true).slice(0,4)
-                            .map((job, i)=>( <JobCard key={i} job={job} />))}
+                            {jobs.filter(job => job._id !== jobDatas._id && job.companyId._id === jobDatas.companyId._id)
+                                .filter(job => true).slice(0, 4)
+                                .map((job, i) => (<JobCard key={i} job={job} />))}
                         </div>
                     </div>
 
@@ -100,7 +112,7 @@ function AppliedJob() {
                 </div>
             </div>
 
-            <Footer/>
+            <Footer />
         </>
     ) : (
         <Loading />

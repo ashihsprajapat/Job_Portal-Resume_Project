@@ -1,30 +1,54 @@
 
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
 import { assets } from './../assets/assets';
 import AppContext from '../context/AppContext';
 
 function Dashboard() {
-    const { navigate } = useContext(AppContext)
+    const { navigate,setCompanyToken, companyToken, setCompanyData, companyData, } = useContext(AppContext)
+    
+
+    //function to logout for company
+
+    const logout= ()=>{
+        setCompanyToken(null);
+        localStorage.removeItem('companyToken')
+        setCompanyData(null)
+        navigate("/")
+    }
+
+    useEffect(()=>{
+        if(companyData){
+            navigate("dashboard/manage-job")
+        }
+    },[companyData])
+
+
     return (
         <div className='min-h-screen  '>
             {/* navbar for Recruiter panel */}
             <div className='shadow py-4'>
                 <div className='flex justify-between items-center'>
                     <img onClick={() => navigate('/')} className='cursor-pointer max-sm:w-32' src={assets.logo} alt="" />
-                    <div className='flex items-center gap-3'>
-                        <p>WelCome, Ashish</p>
-                        <div className='relative group'>
-                            <img className='w-8 border rounded-full ' src={assets.company_icon} alt="" />
-                            <div className='absolute hidden group-hover:block top-0 right-0 z-10 text-black pt-12 rounded '>
-                                <ul className='list-none m-0 p-2 bg-white rounded-md border text-sm'>
-                                    <li className='py-1 px-2 cursor-pointer'>
-                                        Logout
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+                    {
+                        companyData && (
+                            <div className='flex items-center gap-3'>
+                                <p>WelCome, {companyData.name}</p>
+                                <div className='relative group'>
+                                    <img className='w-8 border rounded-full ' src={companyData.image} alt='' />
+
+                                    <div className='absolute hidden group-hover:block top-0 right-0 z-10 text-black pt-12 rounded '>
+                                        <ul className='list-none m-0 p-2 bg-white rounded-md border text-sm'>
+                                            <li className='py-1 px-2 cursor-pointer '  onClick={logout}>
+                                                Logout
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>  
+                        )
+                    }
+
                 </div>
             </div>
 

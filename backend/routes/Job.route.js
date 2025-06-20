@@ -7,13 +7,13 @@ const Router = express.Router();
 
 //Route to get all jobs data
 Router.route("/")
-    .get(getJob)
+    .get(getJob)  //done
 
 
 
 //route to get a single job by id
 Router.route("/:id")
-    .get(getJobById)
+    .get(getJobById) //done
 
 
 export default Router;

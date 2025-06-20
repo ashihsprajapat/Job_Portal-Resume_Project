@@ -3,17 +3,22 @@ import './Config/instrument.js'
 import * as Sentry from "@sentry/node";
 
 import express, { json } from 'express';
-
-import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 import cors from 'cors';
-import CompanyRoute from './routes/Company.routes.js'
-//rout for jobs
-import JobsRoute from './routes/Job.route.js'
 
+
+import { clerkMiddleware } from '@clerk/express'  //clerk middlware 
+import { requireAuth } from '@clerk/express'
+
+
+import CompanyRoute from './routes/Company.routes.js' // company route imported
+
+import JobsRoute from './routes/Job.route.js' //job route imported
+
+import userRoutes from './routes/user.routes.js' // user route imported
 
 import { clerkWebhooks } from './Controller/webHooks.js';
-
+import { ClerkExpressWithAuth } from '@clerk/clerk-sdk-node';
 
 
 dotenv.config();
@@ -26,7 +31,11 @@ const app = express();
 
 app.use(cors());
 app.use(express.json())
+app.use(clerkMiddleware())
+app.use(ClerkExpressWithAuth());
 
+
+//app.use(requireAuth())
 
 const PORT = process.env.PORT || 5000;
 
@@ -51,6 +60,7 @@ app.get("/", (req, res) => {
     return res.json({ message: "ok working" })
 })
 
+app.use( "/", clerkMiddleware());
 
 app.post('/webhooks', clerkWebhooks)
 
@@ -62,6 +72,9 @@ app.use('/api/company', CompanyRoute)
 
 app.use("/api/jobs", JobsRoute)
 
+
+//router for user
+app.use('/api/user', userRoutes)
 
 
 app.get("/debug-sentry", function mainHandler(req, res) {

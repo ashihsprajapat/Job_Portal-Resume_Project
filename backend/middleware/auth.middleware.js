@@ -8,8 +8,6 @@ import Company from '../models/Company.js';
 export const protectCompay = async (req, res, next) => {
     const token = req.headers.token
 
-    //console.log(token)
-
     if (!token) {
         return res.json({ success: false, message: 'not autherize login' })
     }
