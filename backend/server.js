@@ -29,12 +29,9 @@ const app = express();
 
 
 
-const corsOptions = {
-    origin: process.env.ALLOWED_URL_BACKEND_CORS, // Must be a string like "https://your-frontend.vercel.app"
-    credentials: true, // Required if you're using cookies or Authorization headers
-};
-
-app.use(cors(corsOptions));
+app.use(cors({
+    origin: '*'
+  }));
 
 app.use(express.json())
 app.use(clerkMiddleware())
