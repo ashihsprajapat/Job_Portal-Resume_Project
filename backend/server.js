@@ -28,8 +28,13 @@ const app = express();
 
 
 
+const corsOptions = {
+    origin: `${process.env.ALLOWED_URL_BACKEND_CORS}`, // only this URL can access your backend
+    credentials: true, // if you're using cookies, JWT in headers, etc.
+};
 
-app.use(cors());
+app.use(cors(corsOptions));
+
 app.use(express.json())
 app.use(clerkMiddleware())
 app.use(ClerkExpressWithAuth());
@@ -60,7 +65,7 @@ app.get("/", (req, res) => {
     return res.json({ message: "ok working" })
 })
 
-app.use( "/", clerkMiddleware());
+app.use("/", clerkMiddleware());
 
 app.post('/webhooks', clerkWebhooks)
 
