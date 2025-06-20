@@ -28,9 +28,10 @@ const app = express();
 
 
 
+
 const corsOptions = {
-    origin: `${process.env.ALLOWED_URL_BACKEND_CORS}`, // only this URL can access your backend
-    credentials: true, // if you're using cookies, JWT in headers, etc.
+    origin: process.env.ALLOWED_URL_BACKEND_CORS, // Must be a string like "https://your-frontend.vercel.app"
+    credentials: true, // Required if you're using cookies or Authorization headers
 };
 
 app.use(cors(corsOptions));
